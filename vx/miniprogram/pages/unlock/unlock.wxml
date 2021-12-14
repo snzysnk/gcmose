@@ -1,0 +1,20 @@
+<!--miniprogram/pages/unlock/unlock.wxml-->
+<view id="car">
+    <image src="/resource/image/car.jpg"></image>
+    <view class="description">
+        温馨提示你按照道路交通管理法进行机动车驾驶,如有问题，请联系客服，加v：19940113
+    </view>
+    <view class="setting">
+        <view class="cu-avatar round my-header">
+            <image class="head_photo cu-avatar round" src="{{head_photo}}" bindtap="getHeadPhoto"></image>
+        </view>
+        <view style="width:20rpx;"></view>
+        <switch class="sm" checked="{{share}}" bindchange="setPermission"></switch>
+    </view>
+    <view class="permission_description">
+        允许一直展示头像
+    </view>
+</view>
+
+<view class="scan round bg-grey" bindtap="scanUseCar">开始用车</view>
+

@@ -1,0 +1,25 @@
+<!--index.wxml-->
+        <!--<view class="container">-->
+        <!--    <view wx:if="{{avatarUrl}}">-->
+        <!--        <image class="userinfo-avatar" mode="cover" src="{{avatarUrl}}"></image>-->
+        <!--    </view>-->
+        <!--    <block wx:else>-->
+        <!--        <button open-type="getUserInfo" bindtap="getUserProfile">获取头像昵称</button>-->
+        <!--    </block>-->
+        <!--</view>-->
+
+
+<map id="mapId"
+     longitude="{{longitude}}"
+     latitude="{{latitude}}"
+     scale="{{scale}}"
+>
+    <cover-view class="head_box">
+        <cover-image src="/resource/image/location.png" bindtap="confirmLocation"></cover-image>
+        <cover-image class="round" src="{{avatar}}" bindtap="goHome"></cover-image>
+    </cover-view>
+
+    <cover-view class="scan round" bindtap="getCarByScan">
+        <cover-view>扫码用车</cover-view>
+    </cover-view>
+</map>

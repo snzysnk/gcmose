@@ -1,0 +1,45 @@
+<view class="car" wx:if="{{!status}}">
+    <image class="carImg" src="{{image}}">
+    </image>
+    <view class="description" bindtap="chooseImg">
+        <view class="cuIcon-camera lg text-gra"></view>
+        <view>请上传驾驶证信息</view>
+    </view>
+</view>
+<view wx:else class="car">
+    <image class="carImg" src="{{image}}">
+    </image>
+</view>
+
+<view class="register_info">
+    <view class="cu-form-group">
+        <view class="title ttl">名字</view>
+        <input value="{{userName}}" class="inputDefault" placeholder="请输入姓名"></input>
+    </view>
+
+    <view class="cu-form-group">
+        <view class="title ttl">性别</view>
+        <picker bindchange="sexChange" value="{{sex}}" range="{{sex_range}}">
+            <view class="picker inputDefault">
+                {{sex_range[sex]}}
+            </view>
+        </picker>
+    </view>
+
+    <view class="cu-form-group">
+        <view class="title ttl">出生日期</view>
+        <picker mode="date" value="{{date}}" start="2015-09-01" end="2020-09-01" bindchange="DateChange">
+            <view class="picker inputDefault">
+                {{date}}
+            </view>
+        </picker>
+    </view>
+
+    <button wx:if="{{status === 'checking'}}" bindtap="submit" class="cu-btn block bg-red margin-tb-sm lg myButton"
+            type="">
+        提交审查
+    </button>
+    <button wx:if="{{status === 'loading'}}" class="cu-btn block bg-blue margin-tb-sm lg myButton" type="">审查中</button>
+    <button wx:if="{{status === 'ok'}}" class="cu-btn block bg-green margin-tb-sm lg myButton" type="">审查通过
+    </button>
+</view>

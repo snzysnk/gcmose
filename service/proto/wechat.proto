@@ -1,0 +1,16 @@
+syntax = "proto3";
+package ccmose;
+option go_package = "/ccmose/service/auth/api;wechatpb";
+
+message LoginRequest{
+  string code = 1;
+}
+
+message LoginResponse{
+  string accountId = 1;
+  string login_flage = 2;
+}
+
+service LoginService{
+  rpc GetUserInfo(LoginRequest) returns (LoginResponse){}
+}

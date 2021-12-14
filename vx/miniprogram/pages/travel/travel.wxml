@@ -1,0 +1,18 @@
+<view class="container">
+    <view>
+        <view class="hourly-billing">
+            <view class="hourly">
+                {{time}}
+            </view>
+            <view class="billing">
+                费用:{{money}}
+            </view>
+        </view>
+    </view>
+    <map id="mapId"
+         longitude="{{longitude}}"
+         latitude="{{latitude}}"
+         scale="{{scale}}"
+    >
+    </map>
+</view>

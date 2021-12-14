@@ -1,0 +1,8 @@
+#wechat.yaml
+type: google.api.Service
+config_version: 3
+http:
+  rules:
+    - selector: ccmose.LoginService.GetUserInfo
+      post: /v1/auth/login
+      body: "*"
