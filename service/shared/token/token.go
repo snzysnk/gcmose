@@ -76,7 +76,7 @@ func (s *JWTToken) Create(subject string, timeOut time.Duration) (string, error)
 
 func (s *JWTToken) Verify(signed string) (string, error) {
 
-	//签名是否有效，是否过期
+	//签名是否有效，是否过期,格式是否正确
 	//jwt.ParseWithClaims 有三个参数
 	//第一个参数是要验证的token 字符串
 	//第二个参数是claims,会往claims写入数据
@@ -88,11 +88,6 @@ func (s *JWTToken) Verify(signed string) (string, error) {
 
 	if err != nil {
 		return "", fmt.Errorf("cannot parse token")
-	}
-
-	//token 是否有效
-	if !claims.Valid {
-		return "", fmt.Errorf("token is not valid")
 	}
 
 	//验证jwt.ParseWithClaims 是否将&jwt.StandardClaims 正确的赋值到token.Claims 中
