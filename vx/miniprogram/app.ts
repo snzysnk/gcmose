@@ -30,7 +30,7 @@ App<IAppOption>({
                     timeout: 6000,
                     success: (response) => {
                         let data = response.data as any;
-                        console.log(data.accountId);
+                        console.log(data.Token);
                     },
                     fail: console.log
                 });

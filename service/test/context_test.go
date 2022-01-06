@@ -88,3 +88,59 @@ func task(c context.Context, sec time.Duration, taskName string) {
 		fmt.Printf("timeout by taskNmae %s \n", taskName)
 	}
 }
+
+func TestCancelContext(t *testing.T) {
+	c := context.Background()
+	//context.WithCancel(c context) 获取新的context和其终止方法cancelFunc
+	//cancelFunc 能主动终止context
+	c, cancelFunc := context.WithCancel(c)
+
+	//开个协程2秒钟主动调用cancelFunc,终止
+	//如果没有主动调用cancelFunc task 方法中因该是超时timeout 打印
+	go func() {
+		select {
+		case <-time.After(time.Second * 2):
+			cancelFunc()
+		}
+	}()
+
+	task(c, time.Second*6, "test cancelFunc")
+}
+
+//设置主context生存时间为五秒。主程序休眠7秒后调用主context的cancelFunc
+//会将子程序一起cancel掉
+//得出主context的cancelFunc会将其后辈context一同cancel
+func TestCancelWithCoroutineOne(t *testing.T) {
+	background := context.Background()
+	c1, cancelFunc := context.WithCancel(background)
+	defer cancelFunc()
+	c2, _ := context.WithCancel(c1)
+
+	go task(c1, 5*time.Second, "父context")
+	go task(c2, 10*time.Second, "子context")
+
+	time.Sleep(7 * time.Second)
+}
+
+//设置主context 5 秒超时
+//子context 3 秒超时
+//当2秒时主动调用子context的cancelFunc
+//主context正常输出超时结果
+//得出子context的cancelFunc不会影响主context
+func TestCancelWithCoroutineTwo(t *testing.T) {
+	background := context.Background()
+	c1, _ := context.WithCancel(background)
+	c2, cancelFunc := context.WithCancel(c1)
+
+	go task(c1, 5*time.Second, "父context")
+	go task(c2, 3*time.Second, "子context")
+
+	go func() {
+		select {
+		case <-time.After(2 * time.Second):
+			cancelFunc()
+		}
+	}()
+
+	time.Sleep(10 * time.Second)
+}

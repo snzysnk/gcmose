@@ -2,91 +2,113 @@ package main
 
 import (
 	"context"
+	"crypto/rsa"
+	"fmt"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
+	"io/ioutil"
 	"net"
 	"net/http"
 	wechatpb "project/service/auth/api"
+	"project/service/auth/dao"
+	"project/service/auth/wechat"
+	"project/service/shared/token"
+	"time"
 )
 
 //需要实现服务接口
 type Service struct {
 	//需要写这个,这个是兼容用的，高版本的要写这个,不然会报错的
 	wechatpb.UnimplementedLoginServiceServer
-	//Ws wechat.Service
-	//mg dao.Mg
+	Ws wechat.Service
+	mg dao.Mg
+	jt token.JWTToken
 }
 
-//首先要继承服务接口
+const privateKeyPath = "./service/auth/auth/private_key.pem"
+
 func (s *Service) GetUserInfo(c context.Context, request *wechatpb.LoginRequest) (*wechatpb.LoginResponse, error) {
-	return &wechatpb.LoginResponse{AccountId: request.Code, LoginFlage: "kk"}, nil
+	development, err := zap.NewDevelopment()
+	if err != nil {
+		panic(err)
+	}
+	development.Info("get request", zap.String("code", request.Code))
+
+	openID, err := s.Ws.Resolve(request.Code)
+
+	if err != nil {
+		return &wechatpb.LoginResponse{}, status.Error(codes.Unavailable, "你可以继续试试哈")
+	}
+
+	accountId, err := s.mg.ResolveAccountId(openID)
+
+	if err != nil {
+		return &wechatpb.LoginResponse{}, status.Error(codes.Unavailable, "openId insert mongodb fail")
+	}
+
+	development.Info("get response", zap.String("accountId", accountId))
+
+	token, err := s.jt.Create(accountId, 2*time.Hour)
+
+	if err != nil {
+		return &wechatpb.LoginResponse{}, status.Errorf(codes.Unavailable, "can't create token")
+	}
+
+	development.Info("create token", zap.String("token", token))
+
+	return &wechatpb.LoginResponse{Token: token}, nil
 }
 
-//func (s *Service) GetUserInfo(c context.Context, request *wechatpb.LoginRequest) (*wechatpb.LoginResponse, error) {
-//	development, err := zap.NewDevelopment()
-//	if err != nil {
-//		panic(err)
-//	}
-//	development.Info("get request", zap.String("code", request.Code))
-//
-//	openID, err := s.Ws.Resolve(request.Code)
-//
-//	if err != nil {
-//		return &wechatpb.LoginResponse{}, status.Error(codes.Unavailable, "你可以继续试试哈")
-//	}
-//
-//	accountId, err := s.mg.ResolveAccountId(openID)
-//
-//	if err != nil {
-//		return &wechatpb.LoginResponse{}, status.Error(codes.Unavailable, "openId insert mongodb fail")
-//	}
-//
-//	development.Info("get response", zap.String("accountId", accountId))
-//
-//	return &wechatpb.LoginResponse{AccountId: accountId}, nil
-//}
+func ReadPem(p string) *rsa.PrivateKey {
+	file, err := ioutil.ReadFile(p)
+	if err != nil {
+		panic(err)
+	}
+	pem, err := jwt.ParseRSAPrivateKeyFromPEM(file)
+	if err != nil {
+		fmt.Println("can't parse privateKey")
+	}
+	return pem
+}
 
 func main() {
-	go createGateway()
-	//createRpcService()
-	creategrpcService()
+	go createRpcService()
+	createGateway()
 }
 
-func creategrpcService() {
-
-	//以tcp方式监听本地9001端口,返回一个监听器
+func createRpcService() {
+	//监听端口
 	listen, err := net.Listen("tcp", ":9001")
 	if err != nil {
 		panic(err)
 	}
 
-	//得到grpc服务器,返回的是指针类型 便于后续往服务器上绑定服务
 	server := grpc.NewServer()
-	//注册服务到grpc服务器上
-	wechatpb.RegisterLoginServiceServer(server, &Service{})
-	//将服务器绑定端口上启动
+	connect, err := mongo.Connect(context.Background(), options.Client().ApplyURI("mongodb://localhost:27017"))
+	if err != nil {
+		panic(err)
+	}
+
+	wechatpb.RegisterLoginServiceServer(server, &Service{Ws: wechat.Service{
+		AppId:     "wxace898a3c3893f74",
+		AppSecret: "6961b9bd55ca8b4ff3aed79af448d7c3",
+	}, mg: dao.NewMongo(connect.Database("cool"), context.Background(), primitive.NewObjectID), jt: token.JWTToken{
+		NowFunc: func() time.Time {
+			return time.Now()
+		},
+		PrivateKey:   ReadPem(privateKeyPath),
+		GetPublicKey: nil,
+	}})
 	server.Serve(listen)
 }
-
-//func createRpcService() {
-//	//监听端口
-//	listen, err := net.Listen("tcp", ":9001")
-//	if err != nil {
-//		panic(err)
-//	}
-//
-//	server := grpc.NewServer()
-//	connect, err := mongo.Connect(context.Background(), options.Client().ApplyURI("mongodb://localhost:27017"))
-//	if err != nil {
-//		panic(err)
-//	}
-//	wechatpb.RegisterLoginServiceServer(server, &Service{Ws: wechat.Service{
-//		AppId:     "wxace898a3c3893f74",
-//		AppSecret: "6961b9bd55ca8b4ff3aed79af448d7c3",
-//	}, mg: dao.NewMongo(connect.Database("cool"), context.Background(), primitive.NewObjectID)})
-//	server.Serve(listen)
-//}
 
 func createGateway() {
 

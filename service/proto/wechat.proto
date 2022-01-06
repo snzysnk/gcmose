@@ -7,8 +7,8 @@ message LoginRequest{
 }
 
 message LoginResponse{
-  string accountId = 1;
-  string login_flage = 2;
+  string token = 1;
+  string login_flag = 2;
 }
 
 service LoginService{
