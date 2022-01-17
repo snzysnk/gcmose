@@ -2,6 +2,7 @@ type: google.api.Service #固定写法
 config_version: 3 #固定写法
 http: #以http方式进行通信
   rules: #规则定义
-    - selector: ccmose.TripService.GetTrip #定义服务提供者proto 信息, 包名:ccmose 服务名:TripService 服务方法:GetTrip
-      get: /trip/{id} #定义以get方式请求,url:/trip/{id},{id} 为 参数名称  /trip/2 => id = 2
+    - selector: ccmose.TripService.GetTrip
+      post: /v1/rental/trip
+      body: "*"
 

@@ -2,48 +2,12 @@ syntax = "proto3";
 package ccmose;
 option go_package = "/ccmose/gen/go;trippb";
 
-//enum 枚举类型名称 {
-//    枚举变量名称 = 枚举值;
-//}
-enum status {
-  HTTP_NORMAL = 0;
-  HTTP_OK = 200;
-  HTTP_ERROR = 500;
-}
-
-// message 结构体名称 {
-//  数据类型 数据名称 = 参数顺序
-//}
-message Person{
-  string name = 1;
-  int64  age = 2;
-}
-
-message Point {
-  string latitude = 1;
-  string longitude = 2;
-}
-
-
-
 message GetTripRequest{
   int64 id = 1;
 }
 
-/**
-   message 结构体名称 {
-      message类型 变量名称 = 参数顺序
-   }
- */
-message Trip {
-  int64 duration_sec = 1;
-  int32 second = 2;
-}
-
 message GetTripResponse{
-  int64 id = 1;
-  Trip trip = 2;
-  status ts = 3;
+  string statusCode = 1;
 }
 
 service TripService{
