@@ -77,8 +77,8 @@ func ReadPem(p string) *rsa.PrivateKey {
 }
 
 func main() {
-	go createRpcService()
-	createGateway()
+	createRpcService()
+	//createGateway()
 }
 
 func createRpcService() {

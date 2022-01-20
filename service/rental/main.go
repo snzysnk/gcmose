@@ -4,8 +4,8 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	"project/service/auth/auth"
 	trippb "project/service/rental/api"
+	"project/service/shared/auth"
 	srpc "project/service/shared/grpc"
 	"strconv"
 )
@@ -23,8 +23,8 @@ func (s *TripService) GetTrip(c context.Context, request *trippb.GetTripRequest)
 }
 
 func main() {
-	go createGrpcService()
-	createGrpcGateWay()
+	createGrpcService()
+	//createGrpcGateWay()
 }
 
 func createGrpcService() {
@@ -34,7 +34,7 @@ func createGrpcService() {
 		CallBack: func(server grpc.ServiceRegistrar) {
 			trippb.RegisterTripServiceServer(server, &TripService{})
 		},
-		Interceptor: auth.Interceptor{},
+		Interceptor: auth_help.Interceptor("./service/auth/auth/public_key.pem"),
 	}
 
 	manger.Start()

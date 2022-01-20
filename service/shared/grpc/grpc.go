@@ -8,14 +8,13 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 	"net"
 	"net/http"
-	"project/service/auth/auth"
 )
 
 type ServiceManger struct {
 	NewWork     string
 	Port        string
 	CallBack    func(server grpc.ServiceRegistrar)
-	Interceptor auth.Interceptor
+	Interceptor grpc.UnaryServerInterceptor
 }
 
 func (s *ServiceManger) Start() {
@@ -23,7 +22,7 @@ func (s *ServiceManger) Start() {
 	if err != nil {
 		panic(err)
 	}
-	handler := s.Interceptor.Handler
+	handler := s.Interceptor
 	server := grpc.NewServer(grpc.UnaryInterceptor(handler))
 	s.CallBack(server)
 	server.Serve(listen)
