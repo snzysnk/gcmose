@@ -22,8 +22,16 @@ func (s *ServiceManger) Start() {
 	if err != nil {
 		panic(err)
 	}
-	handler := s.Interceptor
-	server := grpc.NewServer(grpc.UnaryInterceptor(handler))
+	i := s.Interceptor
+
+	//拦截器在创建grpc服务时通过传参加入
+	//type UnaryServerInterceptor func(ctx context.Context, req interface{}, info *UnaryServerInfo, handler UnaryHandler) (resp interface{}, err error)
+	//i 是 UnaryServerInterceptor 函数类型
+	//其中ctx 是 context
+	//req 是请求信息
+	//info 是一些其它信息
+	//handler 是下一个要执行的流程,return handler(ctx,req) 代表执行下一个流程，如果输出了的error非nil,代表拦截中断流程
+	server := grpc.NewServer(grpc.UnaryInterceptor(i))
 	s.CallBack(server)
 	server.Serve(listen)
 }

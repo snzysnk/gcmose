@@ -23,8 +23,8 @@ func (s *TripService) GetTrip(c context.Context, request *trippb.GetTripRequest)
 }
 
 func main() {
-	createGrpcService()
-	//createGrpcGateWay()
+	go createGrpcService()
+	createGrpcGateWay()
 }
 
 func createGrpcService() {
