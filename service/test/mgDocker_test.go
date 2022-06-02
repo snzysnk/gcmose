@@ -62,7 +62,6 @@ func TestDocker(t *testing.T) {
 
 }
 
-//func TestMain(m *testing.M) {
-//	//help.RunMongoDbInDocker(&ApplyURI, m)
-//	//os.Exit(m.Run())
-//}
+func TestMain(m *testing.M) {
+	//os.Exit(help.RunMongoDbInDocker(&ApplyURI, m))
+}

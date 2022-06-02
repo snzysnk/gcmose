@@ -51,8 +51,24 @@ Page({
         wx.getLocation({
             type: 'gcj02',
             success: () => {
-                wx.redirectTo({
-                    url: '/pages/travel/travel',
+                let tokenInfo = JSON.parse(wx.getStorageSync('tokenInfo'));
+                wx.request({
+                    url: 'http://localhost:9002/v1/create/trip',
+                    method: 'POST',
+                    header: {Authorization: 'Bearer ' + tokenInfo.token},
+                    data: {
+                        cart_id: 1001,
+                        start: {
+                            longitude: 111.11,
+                            latitude: 122.22
+                        }
+                    },
+                    timeout: 6000,
+                    success: (response) => {
+                        let data = response.data as any;
+                        console.log(data.trip_id);
+                    },
+                    fail: console.log
                 });
             },
             fail: () => {

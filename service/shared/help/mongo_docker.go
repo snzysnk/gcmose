@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func RunMongoDbInDocker(ApplyURI *string, m *testing.M) {
+func RunMongoDbInDocker(ApplyURI *string, m *testing.M) int {
 	//创建docker客户端
 	//client.FromEnv加载环境变量
 	//client.WithAPIVersionNegotiation() 自动协商版本号
@@ -108,4 +108,6 @@ func RunMongoDbInDocker(ApplyURI *string, m *testing.M) {
 	}()
 
 	m.Run()
+
+	return 0
 }

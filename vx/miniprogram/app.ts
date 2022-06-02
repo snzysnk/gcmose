@@ -9,18 +9,7 @@ App<IAppOption>({
         })
     },
     onLaunch() {
-        // 展示本地存储能力
-        // const logs = wx.getStorageSync('logs') || []
-        // logs.unshift(Date.now())
-        //
-        // // const userInfo = wx.getStorageSync('userInfo') || false
-        //
-        // // if (userInfo) {
-        // //     console.log(getApp().globalData.userInfo);
-        // // }
-        //
-        //
-        // // 登录
+        let that = this
         wx.login({
             success: res => {
                 wx.request({
@@ -30,7 +19,7 @@ App<IAppOption>({
                     timeout: 6000,
                     success: (response) => {
                         let data = response.data as any;
-                        console.log(data.Token);
+                        that.setTokenToStorage(data.token, parseInt(data.aging) + Date.parse(Date()) / 1000)
                     },
                     fail: console.log
                 });
@@ -39,5 +28,8 @@ App<IAppOption>({
     },
     parseUserInfo(e: WechatMiniprogram.UserInfo) {
         resolveUserInfo(e)
+    },
+    setTokenToStorage(token: string, aging: number): void {
+        wx.setStorageSync("tokenInfo", JSON.stringify({token: token, aging: aging}))
     }
 })

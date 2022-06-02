@@ -8,6 +8,8 @@ require (
 	github.com/docker/docker v20.10.11+incompatible
 	github.com/docker/go-connections v0.4.0
 	github.com/golang-jwt/jwt/v4 v4.2.0
+	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.6.0
 	github.com/medivhzhan/weapp/v2 v2.4.2
 	github.com/morikuni/aec v1.0.0 // indirect

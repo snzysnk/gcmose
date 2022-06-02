@@ -9,6 +9,7 @@ interface IAppOption {
     },
 
     parseUserInfo(e: WechatMiniprogram.UserInfo): void
+    setTokenToStorage(token:string, aging:number):void
 }
 
 

@@ -83,7 +83,5 @@ Page({
                 }
             }
         })
-        // const userInfo: WechatMiniprogram.UserInfo = e.detail.userInfo;
-        // getApp<IAppOption>().parseUserInfo(userInfo);
     }
 })

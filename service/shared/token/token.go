@@ -4,6 +4,7 @@ import (
 	"crypto/rsa"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
+	"io/ioutil"
 	"time"
 )
 
@@ -84,6 +85,49 @@ func (s *JWTToken) Verify(signed string) (string, error) {
 	//获取密钥为啥是函数呢(只有当读取到header时，才知道加密方式，才知道是否需要密钥,获取密钥有可能是io 操作)
 	claims, err := jwt.ParseWithClaims(signed, &jwt.StandardClaims{}, func(token *jwt.Token) (i interface{}, err error) {
 		return s.GetPublicKey()
+	})
+
+	if err != nil {
+		return "", fmt.Errorf("cannot parse token")
+	}
+
+	//验证jwt.ParseWithClaims 是否将&jwt.StandardClaims 正确的赋值到token.Claims 中
+	//两者应该是同一个
+	standardClaims, ok := claims.Claims.(*jwt.StandardClaims)
+
+	if !ok {
+		return "", fmt.Errorf("not eq standardClaims")
+	}
+
+	return standardClaims.Subject, nil
+}
+
+func ReadPublicPem(p string) (*rsa.PublicKey, error) {
+	file, err := ioutil.ReadFile(p)
+	if err != nil {
+		return nil, err
+	}
+	pem, err := jwt.ParseRSAPublicKeyFromPEM(file)
+	if err != nil {
+		return nil, err
+	}
+	return pem, nil
+}
+
+func JwTVerify(signed string, publicPath string) (string, error) {
+
+	//签名是否有效，是否过期,格式是否正确
+	//jwt.ParseWithClaims 有三个参数
+	//第一个参数是要验证的token 字符串
+	//第二个参数是claims,会往claims写入数据
+	//jwt.ParseWithClaims 第三个参数是获取密钥的函数
+	//获取密钥为啥是函数呢(只有当读取到header时，才知道加密方式，才知道是否需要密钥,获取密钥有可能是io 操作)
+	claims, err := jwt.ParseWithClaims(signed, &jwt.StandardClaims{}, func(token *jwt.Token) (i interface{}, err error) {
+		if publicPath != "" {
+			return ReadPublicPem(publicPath)
+		}
+
+		return publicPath, nil
 	})
 
 	if err != nil {

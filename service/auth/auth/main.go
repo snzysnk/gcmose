@@ -15,11 +15,11 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 	"io/ioutil"
-	"net"
 	"net/http"
 	wechatpb "project/service/auth/api"
 	"project/service/auth/dao"
 	"project/service/auth/wechat"
+	"project/service/shared/service"
 	"project/service/shared/token"
 	"time"
 )
@@ -56,7 +56,9 @@ func (s *Service) GetUserInfo(c context.Context, request *wechatpb.LoginRequest)
 
 	development.Info("get response", zap.String("accountId", accountId))
 
-	token, err := s.jt.Create(accountId, 2*time.Hour)
+	again := 2 * time.Hour
+
+	token, err := s.jt.Create(accountId, again)
 
 	if err != nil {
 		return &wechatpb.LoginResponse{}, status.Errorf(codes.Unavailable, "can't create token")
@@ -64,7 +66,7 @@ func (s *Service) GetUserInfo(c context.Context, request *wechatpb.LoginRequest)
 
 	development.Info("create token", zap.String("token", token))
 
-	return &wechatpb.LoginResponse{Token: token}, nil
+	return &wechatpb.LoginResponse{Token: token, Aging: int64(again.Seconds())}, nil
 }
 
 func ReadPem(p string) *rsa.PrivateKey {
@@ -80,34 +82,27 @@ func ReadPem(p string) *rsa.PrivateKey {
 }
 
 func main() {
-	go createRpcService()
-	createGateway()
-}
+	service.RegisterRpcService(service.RpcServiceConfig{
+		Name: "登录服务",
+		Port: 9001,
+		RegisterFunc: func(s *grpc.Server) {
+			connect, err := mongo.Connect(context.Background(), options.Client().ApplyURI("mongodb://localhost:27017"))
+			if err != nil {
+				panic(err)
+			}
 
-func createRpcService() {
-	//监听端口
-	listen, err := net.Listen("tcp", ":9001")
-	if err != nil {
-		panic(err)
-	}
-
-	server := grpc.NewServer()
-	connect, err := mongo.Connect(context.Background(), options.Client().ApplyURI("mongodb://localhost:27017"))
-	if err != nil {
-		panic(err)
-	}
-
-	wechatpb.RegisterLoginServiceServer(server, &Service{Ws: wechat.Service{
-		AppId:     "wxace898a3c3893f74",
-		AppSecret: "6961b9bd55ca8b4ff3aed79af448d7c3",
-	}, mg: dao.NewMongo(connect.Database("cool"), context.Background(), primitive.NewObjectID), jt: token.JWTToken{
-		NowFunc: func() time.Time {
-			return time.Now()
+			wechatpb.RegisterLoginServiceServer(s, &Service{Ws: wechat.Service{
+				AppId:     "wxace898a3c3893f74",
+				AppSecret: "6961b9bd55ca8b4ff3aed79af448d7c3",
+			}, mg: dao.NewMongo(connect.Database("cool"), context.Background(), primitive.NewObjectID), jt: token.JWTToken{
+				NowFunc: func() time.Time {
+					return time.Now()
+				},
+				PrivateKey:   ReadPem(privateKeyPath),
+				GetPublicKey: nil,
+			}})
 		},
-		PrivateKey:   ReadPem(privateKeyPath),
-		GetPublicKey: nil,
-	}})
-	server.Serve(listen)
+	})
 }
 
 func createGateway() {
