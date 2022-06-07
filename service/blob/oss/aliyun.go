@@ -3,11 +3,12 @@ package myos
 import (
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/sts"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+	blobpb "project/service/blob/api"
 )
 
 type OssInterface interface {
 	GetCredentials(AccessKeyId string, AccessKeySecret string) (*sts.Credentials, error)
-	CreateSingUrl(path string, operation int64) (string, error)
+	CreateSingUrl(path string, status blobpb.Operation_Status) (string, error)
 }
 
 type OssService struct {
@@ -16,7 +17,7 @@ type OssService struct {
 	AccessKeySecret string
 }
 
-func (o *OssService) CreateSingUrl(path string, operation int64) (string, error) {
+func (o *OssService) CreateSingUrl(path string, status blobpb.Operation_Status) (string, error) {
 	credentials, err := o.GetCredentials(o.AccessKeyId, o.AccessKeySecret)
 	if err != nil {
 		return "", err
@@ -43,7 +44,7 @@ func (o *OssService) CreateSingUrl(path string, operation int64) (string, error)
 	*/
 	var options []oss.Option
 	operationAction := oss.HTTPGet
-	if operation == 2 {
+	if status == blobpb.Operation_Status_UPLOAD {
 		/**
 		  这里以png图片为例，故此设置为 image/png
 		*/

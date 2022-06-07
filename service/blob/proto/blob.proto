@@ -2,31 +2,21 @@ syntax = "proto3";
 package blob.v1;
 option go_package = "/ccmose/service/blob/api;blobpb";
 
-message GetUploadUrlRequest{}
-message GetUploadUrlResponse{
-  string url = 1;
+enum Operation_Status {
+  DEFAULT = 0;
+  DOWNLOAD = 1;
+  UPLOAD = 2;
 }
 
-message GetUploadDataRequest{
+message CreateUrlRequest{
   string path = 1;
-}
-message GetUploadDataResponse{
-  bytes data = 2;
+  Operation_Status operation = 2;
 }
 
-message GetFileUrlRequest{
-  string path = 1;
-}
-message GetFileUrlResponse{
+message CreateUrlResponse{
   string url = 1;
-}
-
-message Response{
-  string code = 1;
 }
 
 service BlobService{
-  rpc GetUploadUrl(GetUploadUrlRequest) returns (GetUploadUrlResponse){}
-  rpc GetUploadData(GetUploadDataRequest) returns (GetUploadDataResponse){}
-  rpc GetFileUrl(GetFileUrlRequest) returns (GetFileUrlResponse){}
+  rpc CreateUrl(CreateUrlRequest) returns (CreateUrlResponse){}
 }

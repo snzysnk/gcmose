@@ -1,8 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"google.golang.org/grpc"
-	myos "project/service/blob/oss"
+	blobpb "project/service/blob/api"
 	trippb "project/service/rental/api"
 	"project/service/rental/trip"
 	"project/service/shared/mgutil"
@@ -13,6 +14,11 @@ const AccessKeyId = "xxxxx"
 const AccessKeySecret = "xxxxx"
 
 func main() {
+	dial, err := grpc.Dial("localhost:9004", grpc.WithInsecure())
+	if err != nil {
+		fmt.Println("can't to connect oss service")
+	}
+	client := blobpb.NewBlobServiceClient(dial)
 	service.RegisterRpcService(service.RpcServiceConfig{
 		Name: "行程服务",
 		Port: 9003,
@@ -28,10 +34,7 @@ func main() {
 				Dao: trip.ProfileServiceDao{
 					Database: mgutil.NewMongoDatabaseClient("cool"),
 				},
-				Oss: myos.OssService{
-					AccessKeyId:     AccessKeyId,
-					AccessKeySecret: AccessKeySecret,
-				},
+				Oss: client,
 			})
 		},
 		ValidateToken: true,

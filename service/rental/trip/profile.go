@@ -7,7 +7,7 @@ import (
 	"google.golang.org/grpc/status"
 	"io/ioutil"
 	"net/http"
-	myos "project/service/blob/oss"
+	blobpb "project/service/blob/api"
 	trippb "project/service/rental/api"
 	"project/service/shared/service"
 	"time"
@@ -16,7 +16,7 @@ import (
 type ProfileService struct {
 	trippb.UnimplementedProfileServiceServer
 	Dao ProfileServiceDao
-	Oss myos.OssService
+	Oss blobpb.BlobServiceClient
 }
 
 func (p *ProfileService) GetUploadUrl(ctx context.Context, request *trippb.GetUploadUrlRequest) (*trippb.GetUploadUrlResponse, error) {
@@ -32,11 +32,14 @@ func (p *ProfileService) GetUploadUrl(ctx context.Context, request *trippb.GetUp
 		return nil, status.Error(codes.Aborted, "当前状态不能上传图片")
 	}
 	path := fmt.Sprintf("cool/%s.png", profile.ID.Hex())
-	url, err := p.Oss.CreateSingUrl(path, 2)
+	response, err := p.Oss.CreateUrl(ctx, &blobpb.CreateUrlRequest{
+		Path:      path,
+		Operation: blobpb.Operation_Status_UPLOAD,
+	})
 	if err != nil {
 		return nil, status.Error(codes.Aborted, "不能创建临时上传连接")
 	}
-	return &trippb.GetUploadUrlResponse{Url: url}, nil
+	return &trippb.GetUploadUrlResponse{Url: response.Url}, nil
 }
 
 func (p *ProfileService) ProfileCheck(ctx context.Context, request *trippb.ProfileCheckRequest) (*trippb.ProfileCheckResponse, error) {
@@ -52,9 +55,16 @@ func (p *ProfileService) ProfileCheck(ctx context.Context, request *trippb.Profi
 
 		}
 		path := fmt.Sprintf("cool/%s.png", profile.ID.Hex())
-		url, err := p.Oss.CreateSingUrl(path, 1)
+		grpcResponse, err := p.Oss.CreateUrl(context.Background(), &blobpb.CreateUrlRequest{
+			Path:      path,
+			Operation: blobpb.Operation_Status_DOWNLOAD,
+		})
 
-		response, err := http.Get(url)
+		if err != nil {
+			fmt.Println("can't create singUrl")
+		}
+
+		response, err := http.Get(grpcResponse.Url)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -97,8 +107,11 @@ func (p *ProfileService) GetProfile(ctx context.Context, request *trippb.GetProf
 	}
 
 	if profile.Profile.Path != "" {
-		url, _ := p.Oss.CreateSingUrl(profile.Profile.Path, 1)
-		profile.Profile.Path = url
+		re, _ := p.Oss.CreateUrl(ctx, &blobpb.CreateUrlRequest{
+			Path:      profile.Profile.Path,
+			Operation: blobpb.Operation_Status_DOWNLOAD,
+		})
+		profile.Profile.Path = re.Url
 	}
 	return &trippb.GetProfileResponse{Profile: profile.Profile}, nil
 }

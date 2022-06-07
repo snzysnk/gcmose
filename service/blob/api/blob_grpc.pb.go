@@ -18,9 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BlobServiceClient interface {
-	GetUploadUrl(ctx context.Context, in *GetUploadUrlRequest, opts ...grpc.CallOption) (*GetUploadUrlResponse, error)
-	GetUploadData(ctx context.Context, in *GetUploadDataRequest, opts ...grpc.CallOption) (*GetUploadDataResponse, error)
-	GetFileUrl(ctx context.Context, in *GetFileUrlRequest, opts ...grpc.CallOption) (*GetFileUrlResponse, error)
+	CreateUrl(ctx context.Context, in *CreateUrlRequest, opts ...grpc.CallOption) (*CreateUrlResponse, error)
 }
 
 type blobServiceClient struct {
@@ -31,27 +29,9 @@ func NewBlobServiceClient(cc grpc.ClientConnInterface) BlobServiceClient {
 	return &blobServiceClient{cc}
 }
 
-func (c *blobServiceClient) GetUploadUrl(ctx context.Context, in *GetUploadUrlRequest, opts ...grpc.CallOption) (*GetUploadUrlResponse, error) {
-	out := new(GetUploadUrlResponse)
-	err := c.cc.Invoke(ctx, "/blob.v1.BlobService/GetUploadUrl", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *blobServiceClient) GetUploadData(ctx context.Context, in *GetUploadDataRequest, opts ...grpc.CallOption) (*GetUploadDataResponse, error) {
-	out := new(GetUploadDataResponse)
-	err := c.cc.Invoke(ctx, "/blob.v1.BlobService/GetUploadData", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *blobServiceClient) GetFileUrl(ctx context.Context, in *GetFileUrlRequest, opts ...grpc.CallOption) (*GetFileUrlResponse, error) {
-	out := new(GetFileUrlResponse)
-	err := c.cc.Invoke(ctx, "/blob.v1.BlobService/GetFileUrl", in, out, opts...)
+func (c *blobServiceClient) CreateUrl(ctx context.Context, in *CreateUrlRequest, opts ...grpc.CallOption) (*CreateUrlResponse, error) {
+	out := new(CreateUrlResponse)
+	err := c.cc.Invoke(ctx, "/blob.v1.BlobService/CreateUrl", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -62,9 +42,7 @@ func (c *blobServiceClient) GetFileUrl(ctx context.Context, in *GetFileUrlReques
 // All implementations must embed UnimplementedBlobServiceServer
 // for forward compatibility
 type BlobServiceServer interface {
-	GetUploadUrl(context.Context, *GetUploadUrlRequest) (*GetUploadUrlResponse, error)
-	GetUploadData(context.Context, *GetUploadDataRequest) (*GetUploadDataResponse, error)
-	GetFileUrl(context.Context, *GetFileUrlRequest) (*GetFileUrlResponse, error)
+	CreateUrl(context.Context, *CreateUrlRequest) (*CreateUrlResponse, error)
 	mustEmbedUnimplementedBlobServiceServer()
 }
 
@@ -72,14 +50,8 @@ type BlobServiceServer interface {
 type UnimplementedBlobServiceServer struct {
 }
 
-func (UnimplementedBlobServiceServer) GetUploadUrl(context.Context, *GetUploadUrlRequest) (*GetUploadUrlResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUploadUrl not implemented")
-}
-func (UnimplementedBlobServiceServer) GetUploadData(context.Context, *GetUploadDataRequest) (*GetUploadDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUploadData not implemented")
-}
-func (UnimplementedBlobServiceServer) GetFileUrl(context.Context, *GetFileUrlRequest) (*GetFileUrlResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetFileUrl not implemented")
+func (UnimplementedBlobServiceServer) CreateUrl(context.Context, *CreateUrlRequest) (*CreateUrlResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUrl not implemented")
 }
 func (UnimplementedBlobServiceServer) mustEmbedUnimplementedBlobServiceServer() {}
 
@@ -94,56 +66,20 @@ func RegisterBlobServiceServer(s grpc.ServiceRegistrar, srv BlobServiceServer) {
 	s.RegisterService(&BlobService_ServiceDesc, srv)
 }
 
-func _BlobService_GetUploadUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUploadUrlRequest)
+func _BlobService_CreateUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUrlRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BlobServiceServer).GetUploadUrl(ctx, in)
+		return srv.(BlobServiceServer).CreateUrl(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/blob.v1.BlobService/GetUploadUrl",
+		FullMethod: "/blob.v1.BlobService/CreateUrl",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BlobServiceServer).GetUploadUrl(ctx, req.(*GetUploadUrlRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _BlobService_GetUploadData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUploadDataRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BlobServiceServer).GetUploadData(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/blob.v1.BlobService/GetUploadData",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BlobServiceServer).GetUploadData(ctx, req.(*GetUploadDataRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _BlobService_GetFileUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetFileUrlRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BlobServiceServer).GetFileUrl(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/blob.v1.BlobService/GetFileUrl",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BlobServiceServer).GetFileUrl(ctx, req.(*GetFileUrlRequest))
+		return srv.(BlobServiceServer).CreateUrl(ctx, req.(*CreateUrlRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -156,16 +92,8 @@ var BlobService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*BlobServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetUploadUrl",
-			Handler:    _BlobService_GetUploadUrl_Handler,
-		},
-		{
-			MethodName: "GetUploadData",
-			Handler:    _BlobService_GetUploadData_Handler,
-		},
-		{
-			MethodName: "GetFileUrl",
-			Handler:    _BlobService_GetFileUrl_Handler,
+			MethodName: "CreateUrl",
+			Handler:    _BlobService_CreateUrl_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
