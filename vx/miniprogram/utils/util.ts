@@ -13,6 +13,25 @@ export const formatTime = (date: Date) => {
     )
 }
 
+export const formatTimeTwo = (n: number, format: string) => {
+    let formateArr = ['Y', 'M', 'D', 'h', 'm', 's'];
+    let returnArr: any = [];
+
+    let date = new Date(n);
+    returnArr.push(date.getFullYear());
+    returnArr.push(formatNumber(date.getMonth() + 1));
+    returnArr.push(formatNumber(date.getDate()));
+
+    returnArr.push(formatNumber(date.getHours()));
+    returnArr.push(formatNumber(date.getMinutes()));
+    returnArr.push(formatNumber(date.getSeconds()));
+
+    for (let i = 0; i < returnArr.length; i++) {
+        format = format.replace(formateArr[i], returnArr[i]);
+    }
+    return format;
+}
+
 const formatNumber = (n: number) => {
     const s = n.toString()
     return s[1] ? s : '0' + s

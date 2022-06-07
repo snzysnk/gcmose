@@ -1,5 +1,7 @@
 // app.ts
 
+import {formatTimeTwo} from "./utils/util";
+
 let resolveUserInfo: any;
 
 App<IAppOption>({
@@ -25,6 +27,8 @@ App<IAppOption>({
                 });
             },
         })
+
+        console.log("时间", formatTimeTwo((new Date("1994-01-13")).getTime(), "Y-M-D"))
     },
     parseUserInfo(e: WechatMiniprogram.UserInfo) {
         resolveUserInfo(e)

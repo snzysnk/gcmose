@@ -1,8 +1,0 @@
-#wechat.yaml
-type: google.api.Service
-config_version: 3
-http:
-  rules:
-    - selector: blob.v1.ProfileService.GetProfile
-      post: /v1/blob/getprofile
-      body: "*"

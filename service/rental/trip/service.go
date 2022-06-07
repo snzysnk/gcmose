@@ -6,6 +6,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"hash/fnv"
@@ -141,5 +142,70 @@ func (t *TripMongoService) UpdateTrip(tripId primitive.ObjectID, updateAt int64,
 		return status.Error(codes.Unknown, "no document to update")
 	}
 
+	return nil
+}
+
+type ProfileRecord struct {
+	mgutil.ObjectIdField `bson:"inline"`
+	mgutil.UpdateAtField `bson:"inline"`
+	Profile              *trippb.Profile
+}
+
+type ProfileServiceDao struct {
+	Database *mongo.Database
+}
+
+func (s *ProfileServiceDao) GetProfile(accountId shared.AccountId) (*ProfileRecord, error) {
+	where := bson.M{
+		"profile.accountid": accountId.String(),
+	}
+
+	res := s.Database.Collection("profile").FindOne(context.Background(), where)
+
+	if res.Err() == mongo.ErrNoDocuments {
+		return s.CreateProfile(accountId)
+	}
+
+	if err := res.Err(); err != nil {
+		return nil, err
+	}
+
+	var result ProfileRecord
+
+	res.Decode(&result)
+
+	return &result, nil
+}
+
+func (s *ProfileServiceDao) CreateProfile(accountId shared.AccountId) (*ProfileRecord, error) {
+	profileRecord := &ProfileRecord{
+		Profile: &trippb.Profile{
+			Name:      "",
+			Sex:       0,
+			Birth:     0,
+			Path:      "",
+			AccountId: accountId.String(),
+			Status:    trippb.ValidateStatus_WAIT,
+		},
+	}
+	profileRecord.ID = NewObjectIdFunc()
+	profileRecord.UpdateAt = UpdateAtFunc()
+	_, err := s.Database.Collection("profile").InsertOne(context.Background(), profileRecord)
+	if err != nil {
+		return nil, err
+	}
+	return profileRecord, nil
+}
+
+func (s *ProfileServiceDao) UpdateProfile(id primitive.ObjectID, profile *trippb.Profile) error {
+	result, err := s.Database.Collection("profile").UpdateOne(context.Background(), bson.M{
+		mgutil.IdField: id,
+	}, mgutil.Set(bson.M{"profile": profile}))
+	if err != nil {
+		return err
+	}
+	if result.MatchedCount == 0 {
+		return fmt.Errorf("数据不存在")
+	}
 	return nil
 }

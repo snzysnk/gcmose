@@ -1,4 +1,6 @@
 // miniprogram/pages/unlock/unlock.js
+import {http} from "../../utils/request";
+
 Page({
 
     /**
@@ -48,27 +50,13 @@ Page({
         })
     },
     scanUseCar() {
+        let _this = this
         wx.getLocation({
             type: 'gcj02',
             success: () => {
-                let tokenInfo = JSON.parse(wx.getStorageSync('tokenInfo'));
-                wx.request({
-                    url: 'http://localhost:9002/v1/create/trip',
-                    method: 'POST',
-                    header: {Authorization: 'Bearer ' + tokenInfo.token},
-                    data: {
-                        cart_id: 1001,
-                        start: {
-                            longitude: 111.11,
-                            latitude: 122.22
-                        }
-                    },
-                    timeout: 6000,
-                    success: (response) => {
-                        let data = response.data as any;
-                        console.log(data.trip_id);
-                    },
-                    fail: console.log
+                 _this.createTrip()
+                wx.redirectTo({
+                    url: '/pages/travel/travel',
                 });
             },
             fail: () => {
@@ -79,4 +67,14 @@ Page({
             }
         });
     },
+    async createTrip() {
+        const response = await http("create/trip", "POST", {
+            cart_id: 1001,
+            start: {
+                longitude: 111.11,
+                latitude: 122.22
+            }
+        });
+        console.log(response);
+    }
 });

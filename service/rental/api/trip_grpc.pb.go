@@ -135,3 +135,161 @@ var TripService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "trip.proto",
 }
+
+// ProfileServiceClient is the client API for ProfileService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type ProfileServiceClient interface {
+	GetUploadUrl(ctx context.Context, in *GetUploadUrlRequest, opts ...grpc.CallOption) (*GetUploadUrlResponse, error)
+	ProfileCheck(ctx context.Context, in *ProfileCheckRequest, opts ...grpc.CallOption) (*ProfileCheckResponse, error)
+	GetProfile(ctx context.Context, in *GetProfileRequest, opts ...grpc.CallOption) (*GetProfileResponse, error)
+}
+
+type profileServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewProfileServiceClient(cc grpc.ClientConnInterface) ProfileServiceClient {
+	return &profileServiceClient{cc}
+}
+
+func (c *profileServiceClient) GetUploadUrl(ctx context.Context, in *GetUploadUrlRequest, opts ...grpc.CallOption) (*GetUploadUrlResponse, error) {
+	out := new(GetUploadUrlResponse)
+	err := c.cc.Invoke(ctx, "/ccmose.ProfileService/GetUploadUrl", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *profileServiceClient) ProfileCheck(ctx context.Context, in *ProfileCheckRequest, opts ...grpc.CallOption) (*ProfileCheckResponse, error) {
+	out := new(ProfileCheckResponse)
+	err := c.cc.Invoke(ctx, "/ccmose.ProfileService/ProfileCheck", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *profileServiceClient) GetProfile(ctx context.Context, in *GetProfileRequest, opts ...grpc.CallOption) (*GetProfileResponse, error) {
+	out := new(GetProfileResponse)
+	err := c.cc.Invoke(ctx, "/ccmose.ProfileService/GetProfile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ProfileServiceServer is the server API for ProfileService service.
+// All implementations must embed UnimplementedProfileServiceServer
+// for forward compatibility
+type ProfileServiceServer interface {
+	GetUploadUrl(context.Context, *GetUploadUrlRequest) (*GetUploadUrlResponse, error)
+	ProfileCheck(context.Context, *ProfileCheckRequest) (*ProfileCheckResponse, error)
+	GetProfile(context.Context, *GetProfileRequest) (*GetProfileResponse, error)
+	mustEmbedUnimplementedProfileServiceServer()
+}
+
+// UnimplementedProfileServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedProfileServiceServer struct {
+}
+
+func (UnimplementedProfileServiceServer) GetUploadUrl(context.Context, *GetUploadUrlRequest) (*GetUploadUrlResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUploadUrl not implemented")
+}
+func (UnimplementedProfileServiceServer) ProfileCheck(context.Context, *ProfileCheckRequest) (*ProfileCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ProfileCheck not implemented")
+}
+func (UnimplementedProfileServiceServer) GetProfile(context.Context, *GetProfileRequest) (*GetProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProfile not implemented")
+}
+func (UnimplementedProfileServiceServer) mustEmbedUnimplementedProfileServiceServer() {}
+
+// UnsafeProfileServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ProfileServiceServer will
+// result in compilation errors.
+type UnsafeProfileServiceServer interface {
+	mustEmbedUnimplementedProfileServiceServer()
+}
+
+func RegisterProfileServiceServer(s grpc.ServiceRegistrar, srv ProfileServiceServer) {
+	s.RegisterService(&ProfileService_ServiceDesc, srv)
+}
+
+func _ProfileService_GetUploadUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUploadUrlRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProfileServiceServer).GetUploadUrl(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ccmose.ProfileService/GetUploadUrl",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProfileServiceServer).GetUploadUrl(ctx, req.(*GetUploadUrlRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProfileService_ProfileCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProfileCheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProfileServiceServer).ProfileCheck(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ccmose.ProfileService/ProfileCheck",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProfileServiceServer).ProfileCheck(ctx, req.(*ProfileCheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProfileService_GetProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProfileServiceServer).GetProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ccmose.ProfileService/GetProfile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProfileServiceServer).GetProfile(ctx, req.(*GetProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// ProfileService_ServiceDesc is the grpc.ServiceDesc for ProfileService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var ProfileService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "ccmose.ProfileService",
+	HandlerType: (*ProfileServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetUploadUrl",
+			Handler:    _ProfileService_GetUploadUrl_Handler,
+		},
+		{
+			MethodName: "ProfileCheck",
+			Handler:    _ProfileService_ProfileCheck_Handler,
+		},
+		{
+			MethodName: "GetProfile",
+			Handler:    _ProfileService_GetProfile_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "trip.proto",
+}

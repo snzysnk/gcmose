@@ -28,6 +28,19 @@ enum TripStatus {
   TRIP_END = 2;
 }
 
+enum SexStatus {
+  UN_KNOW = 0;
+  MAN = 1;
+  WOMAN = 2;
+}
+enum ValidateStatus {
+  DEFAULT = 0;
+  WAIT = 1;
+  ING = 2;
+  OK = 3;
+  FAIL = 4;
+}
+
 message TripRequest{
   int64 cart_id = 1;
 }
@@ -54,10 +67,49 @@ message Trip {
   string account_id = 6;
 }
 
+message Profile {
+  string name = 1;
+  SexStatus sex = 2;
+  int64  birth = 3;
+  string  path = 4;
+  string  account_id = 5;
+  ValidateStatus status = 6;
+}
+
+message GetUploadUrlRequest{
+
+}
+
+message GetUploadUrlResponse{
+  string  url = 1;
+}
+
+message GetProfileRequest{
+
+}
+
+message GetProfileResponse{
+  Profile profile = 1;
+}
+
+message ProfileCheckRequest{
+  string name = 1;
+  SexStatus sex = 2;
+  int64  birth = 3;
+}
+message ProfileCheckResponse{
+  string status = 1;
+}
 
 service TripService{
   rpc CreateTrip(CreateTripRequest) returns (CreateTripResponse){}
   rpc UpdateTrip(UpdateTripRequest) returns(UpdateTripResponse){}
+}
+
+service ProfileService {
+  rpc GetUploadUrl(GetUploadUrlRequest) returns (GetUploadUrlResponse){}
+  rpc ProfileCheck(ProfileCheckRequest) returns (ProfileCheckResponse){}
+  rpc GetProfile(GetProfileRequest) returns (GetProfileResponse){}
 }
 
 

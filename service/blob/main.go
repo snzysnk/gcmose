@@ -3,24 +3,37 @@ package main
 import (
 	"context"
 	"google.golang.org/grpc"
-	profilepb "project/service/blob/api"
-	"project/service/shared/service"
+	"project/service/blob/api"
+	myos "project/service/blob/oss"
 )
 
+const AccessKeyId = "LTAI5t8msVaKSFucLeBwsVC6"
+const AccessKeySecret = "4ellrwDdU7vREBXvlErPE5YN5FZwKn"
+
 type Service struct {
-	profilepb.UnimplementedProfileServiceServer
+	blobpb.UnimplementedBlobServiceServer
+	Client myos.OssInterface
 }
 
-func (s *Service) GetProfile(ctx context.Context, in *profilepb.Request) (*profilepb.Response, error) {
-	return &profilepb.Response{Code: "200"}, nil
+func (s *Service) GetUploadUrl(ctx context.Context, in *blobpb.GetUploadUrlRequest, opts ...grpc.CallOption) (*blobpb.GetUploadUrlResponse, error) {
+	panic("implement me")
+}
+
+func (s *Service) GetUploadData(ctx context.Context, in *blobpb.GetUploadDataRequest, opts ...grpc.CallOption) (*blobpb.GetUploadDataResponse, error) {
+	panic("implement me")
+}
+
+func (s *Service) GetFileUrl(ctx context.Context, in *blobpb.GetFileUrlRequest, opts ...grpc.CallOption) (*blobpb.GetFileUrlResponse, error) {
+	panic("implement me")
 }
 
 func main() {
-	service.RegisterRpcService(service.RpcServiceConfig{
-		Name: "图片服务",
-		Port: 9006,
-		RegisterFunc: func(s *grpc.Server) {
-			profilepb.RegisterProfileServiceServer(s, &Service{})
+	service := Service{
+		Client: &myos.OssService{
+			AccessKeyId:     AccessKeyId,
+			AccessKeySecret: AccessKeySecret,
 		},
-	})
+	}
+
+	service.GetFileUrl(context.Background(), &blobpb.GetFileUrlRequest{Path: "/cool/b.png"})
 }

@@ -8,4 +8,11 @@ http: #以http方式进行通信
     - selector: ccmose.TripService.UpdateTrip
       post: /v1/update/trip
       body: "*"
-
+    - selector: ccmose.ProfileService.GetUploadUrl
+      get: /v1/profile/uploadUrl
+    - selector: ccmose.ProfileService.ProfileCheck
+      post: /v1/profile/check
+      body: "*"
+    - selector: ccmose.ProfileService.GetProfile
+      post: /v1/profile/data
+      body: "*"

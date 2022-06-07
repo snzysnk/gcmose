@@ -69,6 +69,110 @@ func (TripStatus) EnumDescriptor() ([]byte, []int) {
 	return file_trip_proto_rawDescGZIP(), []int{0}
 }
 
+type SexStatus int32
+
+const (
+	SexStatus_UN_KNOW SexStatus = 0
+	SexStatus_MAN     SexStatus = 1
+	SexStatus_WOMAN   SexStatus = 2
+)
+
+// Enum value maps for SexStatus.
+var (
+	SexStatus_name = map[int32]string{
+		0: "UN_KNOW",
+		1: "MAN",
+		2: "WOMAN",
+	}
+	SexStatus_value = map[string]int32{
+		"UN_KNOW": 0,
+		"MAN":     1,
+		"WOMAN":   2,
+	}
+)
+
+func (x SexStatus) Enum() *SexStatus {
+	p := new(SexStatus)
+	*p = x
+	return p
+}
+
+func (x SexStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SexStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_trip_proto_enumTypes[1].Descriptor()
+}
+
+func (SexStatus) Type() protoreflect.EnumType {
+	return &file_trip_proto_enumTypes[1]
+}
+
+func (x SexStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SexStatus.Descriptor instead.
+func (SexStatus) EnumDescriptor() ([]byte, []int) {
+	return file_trip_proto_rawDescGZIP(), []int{1}
+}
+
+type ValidateStatus int32
+
+const (
+	ValidateStatus_DEFAULT ValidateStatus = 0
+	ValidateStatus_WAIT    ValidateStatus = 1
+	ValidateStatus_ING     ValidateStatus = 2
+	ValidateStatus_OK      ValidateStatus = 3
+	ValidateStatus_FAIL    ValidateStatus = 4
+)
+
+// Enum value maps for ValidateStatus.
+var (
+	ValidateStatus_name = map[int32]string{
+		0: "DEFAULT",
+		1: "WAIT",
+		2: "ING",
+		3: "OK",
+		4: "FAIL",
+	}
+	ValidateStatus_value = map[string]int32{
+		"DEFAULT": 0,
+		"WAIT":    1,
+		"ING":     2,
+		"OK":      3,
+		"FAIL":    4,
+	}
+)
+
+func (x ValidateStatus) Enum() *ValidateStatus {
+	p := new(ValidateStatus)
+	*p = x
+	return p
+}
+
+func (x ValidateStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ValidateStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_trip_proto_enumTypes[2].Descriptor()
+}
+
+func (ValidateStatus) Type() protoreflect.EnumType {
+	return &file_trip_proto_enumTypes[2]
+}
+
+func (x ValidateStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ValidateStatus.Descriptor instead.
+func (ValidateStatus) EnumDescriptor() ([]byte, []int) {
+	return file_trip_proto_rawDescGZIP(), []int{2}
+}
+
 type CreateTripRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -557,6 +661,373 @@ func (x *Trip) GetAccountId() string {
 	return ""
 }
 
+type Profile struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name      string         `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Sex       SexStatus      `protobuf:"varint,2,opt,name=sex,proto3,enum=ccmose.SexStatus" json:"sex,omitempty"`
+	Birth     int64          `protobuf:"varint,3,opt,name=birth,proto3" json:"birth,omitempty"`
+	Path      string         `protobuf:"bytes,4,opt,name=path,proto3" json:"path,omitempty"`
+	AccountId string         `protobuf:"bytes,5,opt,name=account_id,json=accountId,proto3" json:"account_id,omitempty"`
+	Status    ValidateStatus `protobuf:"varint,6,opt,name=status,proto3,enum=ccmose.ValidateStatus" json:"status,omitempty"`
+}
+
+func (x *Profile) Reset() {
+	*x = Profile{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_trip_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Profile) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Profile) ProtoMessage() {}
+
+func (x *Profile) ProtoReflect() protoreflect.Message {
+	mi := &file_trip_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Profile.ProtoReflect.Descriptor instead.
+func (*Profile) Descriptor() ([]byte, []int) {
+	return file_trip_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *Profile) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Profile) GetSex() SexStatus {
+	if x != nil {
+		return x.Sex
+	}
+	return SexStatus_UN_KNOW
+}
+
+func (x *Profile) GetBirth() int64 {
+	if x != nil {
+		return x.Birth
+	}
+	return 0
+}
+
+func (x *Profile) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+func (x *Profile) GetAccountId() string {
+	if x != nil {
+		return x.AccountId
+	}
+	return ""
+}
+
+func (x *Profile) GetStatus() ValidateStatus {
+	if x != nil {
+		return x.Status
+	}
+	return ValidateStatus_DEFAULT
+}
+
+type GetUploadUrlRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *GetUploadUrlRequest) Reset() {
+	*x = GetUploadUrlRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_trip_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetUploadUrlRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUploadUrlRequest) ProtoMessage() {}
+
+func (x *GetUploadUrlRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_trip_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUploadUrlRequest.ProtoReflect.Descriptor instead.
+func (*GetUploadUrlRequest) Descriptor() ([]byte, []int) {
+	return file_trip_proto_rawDescGZIP(), []int{9}
+}
+
+type GetUploadUrlResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Url string `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+}
+
+func (x *GetUploadUrlResponse) Reset() {
+	*x = GetUploadUrlResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_trip_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetUploadUrlResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUploadUrlResponse) ProtoMessage() {}
+
+func (x *GetUploadUrlResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_trip_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUploadUrlResponse.ProtoReflect.Descriptor instead.
+func (*GetUploadUrlResponse) Descriptor() ([]byte, []int) {
+	return file_trip_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *GetUploadUrlResponse) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+type GetProfileRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *GetProfileRequest) Reset() {
+	*x = GetProfileRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_trip_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetProfileRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetProfileRequest) ProtoMessage() {}
+
+func (x *GetProfileRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_trip_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetProfileRequest.ProtoReflect.Descriptor instead.
+func (*GetProfileRequest) Descriptor() ([]byte, []int) {
+	return file_trip_proto_rawDescGZIP(), []int{11}
+}
+
+type GetProfileResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Profile *Profile `protobuf:"bytes,1,opt,name=profile,proto3" json:"profile,omitempty"`
+}
+
+func (x *GetProfileResponse) Reset() {
+	*x = GetProfileResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_trip_proto_msgTypes[12]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetProfileResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetProfileResponse) ProtoMessage() {}
+
+func (x *GetProfileResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_trip_proto_msgTypes[12]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetProfileResponse.ProtoReflect.Descriptor instead.
+func (*GetProfileResponse) Descriptor() ([]byte, []int) {
+	return file_trip_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *GetProfileResponse) GetProfile() *Profile {
+	if x != nil {
+		return x.Profile
+	}
+	return nil
+}
+
+type ProfileCheckRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name  string    `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Sex   SexStatus `protobuf:"varint,2,opt,name=sex,proto3,enum=ccmose.SexStatus" json:"sex,omitempty"`
+	Birth int64     `protobuf:"varint,3,opt,name=birth,proto3" json:"birth,omitempty"`
+}
+
+func (x *ProfileCheckRequest) Reset() {
+	*x = ProfileCheckRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_trip_proto_msgTypes[13]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ProfileCheckRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProfileCheckRequest) ProtoMessage() {}
+
+func (x *ProfileCheckRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_trip_proto_msgTypes[13]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProfileCheckRequest.ProtoReflect.Descriptor instead.
+func (*ProfileCheckRequest) Descriptor() ([]byte, []int) {
+	return file_trip_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *ProfileCheckRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ProfileCheckRequest) GetSex() SexStatus {
+	if x != nil {
+		return x.Sex
+	}
+	return SexStatus_UN_KNOW
+}
+
+func (x *ProfileCheckRequest) GetBirth() int64 {
+	if x != nil {
+		return x.Birth
+	}
+	return 0
+}
+
+type ProfileCheckResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Status string `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
+}
+
+func (x *ProfileCheckResponse) Reset() {
+	*x = ProfileCheckResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_trip_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ProfileCheckResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProfileCheckResponse) ProtoMessage() {}
+
+func (x *ProfileCheckResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_trip_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProfileCheckResponse.ProtoReflect.Descriptor instead.
+func (*ProfileCheckResponse) Descriptor() ([]byte, []int) {
+	return file_trip_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *ProfileCheckResponse) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
 var File_trip_proto protoreflect.FileDescriptor
 
 var file_trip_proto_rawDesc = []byte{
@@ -613,23 +1084,76 @@ var file_trip_proto_rawDesc = []byte{
 	0x72, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x63, 0x61, 0x72,
 	0x74, 0x49, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x69,
 	0x64, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74,
-	0x49, 0x64, 0x2a, 0x38, 0x0a, 0x0a, 0x54, 0x72, 0x69, 0x70, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73,
-	0x12, 0x0e, 0x0a, 0x0a, 0x54, 0x52, 0x49, 0x50, 0x5f, 0x42, 0x45, 0x47, 0x49, 0x4e, 0x10, 0x00,
-	0x12, 0x0c, 0x0a, 0x08, 0x54, 0x52, 0x49, 0x50, 0x5f, 0x49, 0x4e, 0x47, 0x10, 0x01, 0x12, 0x0c,
-	0x0a, 0x08, 0x54, 0x52, 0x49, 0x50, 0x5f, 0x45, 0x4e, 0x44, 0x10, 0x02, 0x32, 0x9b, 0x01, 0x0a,
-	0x0b, 0x54, 0x72, 0x69, 0x70, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x45, 0x0a, 0x0a,
-	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x72, 0x69, 0x70, 0x12, 0x19, 0x2e, 0x63, 0x63, 0x6d,
-	0x6f, 0x73, 0x65, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x72, 0x69, 0x70, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x63, 0x63, 0x6d, 0x6f, 0x73, 0x65, 0x2e, 0x43,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x72, 0x69, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x22, 0x00, 0x12, 0x45, 0x0a, 0x0a, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x72, 0x69,
-	0x70, 0x12, 0x19, 0x2e, 0x63, 0x63, 0x6d, 0x6f, 0x73, 0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74,
-	0x65, 0x54, 0x72, 0x69, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x63,
-	0x63, 0x6d, 0x6f, 0x73, 0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x72, 0x69, 0x70,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x23, 0x5a, 0x21, 0x2f, 0x63,
-	0x63, 0x6d, 0x6f, 0x73, 0x65, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2f, 0x72, 0x65,
-	0x6e, 0x74, 0x61, 0x6c, 0x2f, 0x61, 0x70, 0x69, 0x3b, 0x74, 0x72, 0x69, 0x70, 0x70, 0x62, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x49, 0x64, 0x22, 0xbb, 0x01, 0x0a, 0x07, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x12, 0x12,
+	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
+	0x6d, 0x65, 0x12, 0x23, 0x0a, 0x03, 0x73, 0x65, 0x78, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32,
+	0x11, 0x2e, 0x63, 0x63, 0x6d, 0x6f, 0x73, 0x65, 0x2e, 0x53, 0x65, 0x78, 0x53, 0x74, 0x61, 0x74,
+	0x75, 0x73, 0x52, 0x03, 0x73, 0x65, 0x78, 0x12, 0x14, 0x0a, 0x05, 0x62, 0x69, 0x72, 0x74, 0x68,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x62, 0x69, 0x72, 0x74, 0x68, 0x12, 0x12, 0x0a,
+	0x04, 0x70, 0x61, 0x74, 0x68, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x70, 0x61, 0x74,
+	0x68, 0x12, 0x1d, 0x0a, 0x0a, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18,
+	0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x49, 0x64,
+	0x12, 0x2e, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0e,
+	0x32, 0x16, 0x2e, 0x63, 0x63, 0x6d, 0x6f, 0x73, 0x65, 0x2e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61,
+	0x74, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x22, 0x15, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x55, 0x72, 0x6c,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x28, 0x0a, 0x14, 0x47, 0x65, 0x74, 0x55, 0x70,
+	0x6c, 0x6f, 0x61, 0x64, 0x55, 0x72, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x10, 0x0a, 0x03, 0x75, 0x72, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x75, 0x72,
+	0x6c, 0x22, 0x13, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x3f, 0x0a, 0x12, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f,
+	0x66, 0x69, 0x6c, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x29, 0x0a, 0x07,
+	0x70, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e,
+	0x63, 0x63, 0x6d, 0x6f, 0x73, 0x65, 0x2e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x52, 0x07,
+	0x70, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x22, 0x64, 0x0a, 0x13, 0x50, 0x72, 0x6f, 0x66, 0x69,
+	0x6c, 0x65, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12,
+	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
+	0x6d, 0x65, 0x12, 0x23, 0x0a, 0x03, 0x73, 0x65, 0x78, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32,
+	0x11, 0x2e, 0x63, 0x63, 0x6d, 0x6f, 0x73, 0x65, 0x2e, 0x53, 0x65, 0x78, 0x53, 0x74, 0x61, 0x74,
+	0x75, 0x73, 0x52, 0x03, 0x73, 0x65, 0x78, 0x12, 0x14, 0x0a, 0x05, 0x62, 0x69, 0x72, 0x74, 0x68,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x62, 0x69, 0x72, 0x74, 0x68, 0x22, 0x2e, 0x0a,
+	0x14, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x2a, 0x38, 0x0a,
+	0x0a, 0x54, 0x72, 0x69, 0x70, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0e, 0x0a, 0x0a, 0x54,
+	0x52, 0x49, 0x50, 0x5f, 0x42, 0x45, 0x47, 0x49, 0x4e, 0x10, 0x00, 0x12, 0x0c, 0x0a, 0x08, 0x54,
+	0x52, 0x49, 0x50, 0x5f, 0x49, 0x4e, 0x47, 0x10, 0x01, 0x12, 0x0c, 0x0a, 0x08, 0x54, 0x52, 0x49,
+	0x50, 0x5f, 0x45, 0x4e, 0x44, 0x10, 0x02, 0x2a, 0x2c, 0x0a, 0x09, 0x53, 0x65, 0x78, 0x53, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x12, 0x0b, 0x0a, 0x07, 0x55, 0x4e, 0x5f, 0x4b, 0x4e, 0x4f, 0x57, 0x10,
+	0x00, 0x12, 0x07, 0x0a, 0x03, 0x4d, 0x41, 0x4e, 0x10, 0x01, 0x12, 0x09, 0x0a, 0x05, 0x57, 0x4f,
+	0x4d, 0x41, 0x4e, 0x10, 0x02, 0x2a, 0x42, 0x0a, 0x0e, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74,
+	0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x0b, 0x0a, 0x07, 0x44, 0x45, 0x46, 0x41, 0x55,
+	0x4c, 0x54, 0x10, 0x00, 0x12, 0x08, 0x0a, 0x04, 0x57, 0x41, 0x49, 0x54, 0x10, 0x01, 0x12, 0x07,
+	0x0a, 0x03, 0x49, 0x4e, 0x47, 0x10, 0x02, 0x12, 0x06, 0x0a, 0x02, 0x4f, 0x4b, 0x10, 0x03, 0x12,
+	0x08, 0x0a, 0x04, 0x46, 0x41, 0x49, 0x4c, 0x10, 0x04, 0x32, 0x9b, 0x01, 0x0a, 0x0b, 0x54, 0x72,
+	0x69, 0x70, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x45, 0x0a, 0x0a, 0x43, 0x72, 0x65,
+	0x61, 0x74, 0x65, 0x54, 0x72, 0x69, 0x70, 0x12, 0x19, 0x2e, 0x63, 0x63, 0x6d, 0x6f, 0x73, 0x65,
+	0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x72, 0x69, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x63, 0x63, 0x6d, 0x6f, 0x73, 0x65, 0x2e, 0x43, 0x72, 0x65, 0x61,
+	0x74, 0x65, 0x54, 0x72, 0x69, 0x70, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00,
+	0x12, 0x45, 0x0a, 0x0a, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x72, 0x69, 0x70, 0x12, 0x19,
+	0x2e, 0x63, 0x63, 0x6d, 0x6f, 0x73, 0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x72,
+	0x69, 0x70, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x63, 0x63, 0x6d, 0x6f,
+	0x73, 0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x54, 0x72, 0x69, 0x70, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x32, 0xf1, 0x01, 0x0a, 0x0e, 0x50, 0x72, 0x6f, 0x66,
+	0x69, 0x6c, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x4b, 0x0a, 0x0c, 0x47, 0x65,
+	0x74, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x55, 0x72, 0x6c, 0x12, 0x1b, 0x2e, 0x63, 0x63, 0x6d,
+	0x6f, 0x73, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x55, 0x72, 0x6c,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x63, 0x63, 0x6d, 0x6f, 0x73, 0x65,
+	0x2e, 0x47, 0x65, 0x74, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x55, 0x72, 0x6c, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4b, 0x0a, 0x0c, 0x50, 0x72, 0x6f, 0x66, 0x69,
+	0x6c, 0x65, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x12, 0x1b, 0x2e, 0x63, 0x63, 0x6d, 0x6f, 0x73, 0x65,
+	0x2e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x63, 0x63, 0x6d, 0x6f, 0x73, 0x65, 0x2e, 0x50, 0x72,
+	0x6f, 0x66, 0x69, 0x6c, 0x65, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x22, 0x00, 0x12, 0x45, 0x0a, 0x0a, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x66, 0x69,
+	0x6c, 0x65, 0x12, 0x19, 0x2e, 0x63, 0x63, 0x6d, 0x6f, 0x73, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x50,
+	0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e,
+	0x63, 0x63, 0x6d, 0x6f, 0x73, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c,
+	0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x23, 0x5a, 0x21, 0x2f,
+	0x63, 0x63, 0x6d, 0x6f, 0x73, 0x65, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2f, 0x72,
+	0x65, 0x6e, 0x74, 0x61, 0x6c, 0x2f, 0x61, 0x70, 0x69, 0x3b, 0x74, 0x72, 0x69, 0x70, 0x70, 0x62,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -644,38 +1168,57 @@ func file_trip_proto_rawDescGZIP() []byte {
 	return file_trip_proto_rawDescData
 }
 
-var file_trip_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_trip_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_trip_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_trip_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_trip_proto_goTypes = []interface{}{
-	(TripStatus)(0),            // 0: ccmose.TripStatus
-	(*CreateTripRequest)(nil),  // 1: ccmose.CreateTripRequest
-	(*UpdateTripRequest)(nil),  // 2: ccmose.UpdateTripRequest
-	(*UpdateTripResponse)(nil), // 3: ccmose.UpdateTripResponse
-	(*CreateTripResponse)(nil), // 4: ccmose.CreateTripResponse
-	(*TripRequest)(nil),        // 5: ccmose.TripRequest
-	(*Location)(nil),           // 6: ccmose.Location
-	(*LocationStatus)(nil),     // 7: ccmose.LocationStatus
-	(*Trip)(nil),               // 8: ccmose.Trip
+	(TripStatus)(0),              // 0: ccmose.TripStatus
+	(SexStatus)(0),               // 1: ccmose.SexStatus
+	(ValidateStatus)(0),          // 2: ccmose.ValidateStatus
+	(*CreateTripRequest)(nil),    // 3: ccmose.CreateTripRequest
+	(*UpdateTripRequest)(nil),    // 4: ccmose.UpdateTripRequest
+	(*UpdateTripResponse)(nil),   // 5: ccmose.UpdateTripResponse
+	(*CreateTripResponse)(nil),   // 6: ccmose.CreateTripResponse
+	(*TripRequest)(nil),          // 7: ccmose.TripRequest
+	(*Location)(nil),             // 8: ccmose.Location
+	(*LocationStatus)(nil),       // 9: ccmose.LocationStatus
+	(*Trip)(nil),                 // 10: ccmose.Trip
+	(*Profile)(nil),              // 11: ccmose.Profile
+	(*GetUploadUrlRequest)(nil),  // 12: ccmose.GetUploadUrlRequest
+	(*GetUploadUrlResponse)(nil), // 13: ccmose.GetUploadUrlResponse
+	(*GetProfileRequest)(nil),    // 14: ccmose.GetProfileRequest
+	(*GetProfileResponse)(nil),   // 15: ccmose.GetProfileResponse
+	(*ProfileCheckRequest)(nil),  // 16: ccmose.ProfileCheckRequest
+	(*ProfileCheckResponse)(nil), // 17: ccmose.ProfileCheckResponse
 }
 var file_trip_proto_depIdxs = []int32{
-	6,  // 0: ccmose.CreateTripRequest.start:type_name -> ccmose.Location
-	6,  // 1: ccmose.UpdateTripRequest.current:type_name -> ccmose.Location
-	8,  // 2: ccmose.UpdateTripResponse.trip:type_name -> ccmose.Trip
-	8,  // 3: ccmose.CreateTripResponse.trip:type_name -> ccmose.Trip
-	6,  // 4: ccmose.LocationStatus.location:type_name -> ccmose.Location
-	7,  // 5: ccmose.Trip.start:type_name -> ccmose.LocationStatus
-	7,  // 6: ccmose.Trip.current:type_name -> ccmose.LocationStatus
-	7,  // 7: ccmose.Trip.end:type_name -> ccmose.LocationStatus
+	8,  // 0: ccmose.CreateTripRequest.start:type_name -> ccmose.Location
+	8,  // 1: ccmose.UpdateTripRequest.current:type_name -> ccmose.Location
+	10, // 2: ccmose.UpdateTripResponse.trip:type_name -> ccmose.Trip
+	10, // 3: ccmose.CreateTripResponse.trip:type_name -> ccmose.Trip
+	8,  // 4: ccmose.LocationStatus.location:type_name -> ccmose.Location
+	9,  // 5: ccmose.Trip.start:type_name -> ccmose.LocationStatus
+	9,  // 6: ccmose.Trip.current:type_name -> ccmose.LocationStatus
+	9,  // 7: ccmose.Trip.end:type_name -> ccmose.LocationStatus
 	0,  // 8: ccmose.Trip.status:type_name -> ccmose.TripStatus
-	1,  // 9: ccmose.TripService.CreateTrip:input_type -> ccmose.CreateTripRequest
-	2,  // 10: ccmose.TripService.UpdateTrip:input_type -> ccmose.UpdateTripRequest
-	4,  // 11: ccmose.TripService.CreateTrip:output_type -> ccmose.CreateTripResponse
-	3,  // 12: ccmose.TripService.UpdateTrip:output_type -> ccmose.UpdateTripResponse
-	11, // [11:13] is the sub-list for method output_type
-	9,  // [9:11] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	1,  // 9: ccmose.Profile.sex:type_name -> ccmose.SexStatus
+	2,  // 10: ccmose.Profile.status:type_name -> ccmose.ValidateStatus
+	11, // 11: ccmose.GetProfileResponse.profile:type_name -> ccmose.Profile
+	1,  // 12: ccmose.ProfileCheckRequest.sex:type_name -> ccmose.SexStatus
+	3,  // 13: ccmose.TripService.CreateTrip:input_type -> ccmose.CreateTripRequest
+	4,  // 14: ccmose.TripService.UpdateTrip:input_type -> ccmose.UpdateTripRequest
+	12, // 15: ccmose.ProfileService.GetUploadUrl:input_type -> ccmose.GetUploadUrlRequest
+	16, // 16: ccmose.ProfileService.ProfileCheck:input_type -> ccmose.ProfileCheckRequest
+	14, // 17: ccmose.ProfileService.GetProfile:input_type -> ccmose.GetProfileRequest
+	6,  // 18: ccmose.TripService.CreateTrip:output_type -> ccmose.CreateTripResponse
+	5,  // 19: ccmose.TripService.UpdateTrip:output_type -> ccmose.UpdateTripResponse
+	13, // 20: ccmose.ProfileService.GetUploadUrl:output_type -> ccmose.GetUploadUrlResponse
+	17, // 21: ccmose.ProfileService.ProfileCheck:output_type -> ccmose.ProfileCheckResponse
+	15, // 22: ccmose.ProfileService.GetProfile:output_type -> ccmose.GetProfileResponse
+	18, // [18:23] is the sub-list for method output_type
+	13, // [13:18] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_trip_proto_init() }
@@ -780,16 +1323,100 @@ func file_trip_proto_init() {
 				return nil
 			}
 		}
+		file_trip_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Profile); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_trip_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetUploadUrlRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_trip_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetUploadUrlResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_trip_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetProfileRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_trip_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetProfileResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_trip_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ProfileCheckRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_trip_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ProfileCheckResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_trip_proto_rawDesc,
-			NumEnums:      1,
-			NumMessages:   8,
+			NumEnums:      3,
+			NumMessages:   15,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   2,
 		},
 		GoTypes:           file_trip_proto_goTypes,
 		DependencyIndexes: file_trip_proto_depIdxs,

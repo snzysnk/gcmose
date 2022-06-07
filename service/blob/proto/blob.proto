@@ -1,0 +1,32 @@
+syntax = "proto3";
+package blob.v1;
+option go_package = "/ccmose/service/blob/api;blobpb";
+
+message GetUploadUrlRequest{}
+message GetUploadUrlResponse{
+  string url = 1;
+}
+
+message GetUploadDataRequest{
+  string path = 1;
+}
+message GetUploadDataResponse{
+  bytes data = 2;
+}
+
+message GetFileUrlRequest{
+  string path = 1;
+}
+message GetFileUrlResponse{
+  string url = 1;
+}
+
+message Response{
+  string code = 1;
+}
+
+service BlobService{
+  rpc GetUploadUrl(GetUploadUrlRequest) returns (GetUploadUrlResponse){}
+  rpc GetUploadData(GetUploadDataRequest) returns (GetUploadDataResponse){}
+  rpc GetFileUrl(GetFileUrlRequest) returns (GetFileUrlResponse){}
+}

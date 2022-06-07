@@ -14,7 +14,7 @@
 <view class="register_info">
     <view class="cu-form-group">
         <view class="title ttl">名字</view>
-        <input value="{{userName}}" class="inputDefault" placeholder="请输入姓名"></input>
+        <input  model:value="{{userName}}" class="inputDefault" placeholder="请输入姓名"></input>
     </view>
 
     <view class="cu-form-group">
@@ -28,7 +28,7 @@
 
     <view class="cu-form-group">
         <view class="title ttl">出生日期</view>
-        <picker mode="date" value="{{date}}" start="2015-09-01" end="2020-09-01" bindchange="DateChange">
+        <picker mode="date" value="{{date}}" start="2015-09-01" end="2022-09-01" bindchange="DateChange">
             <view class="picker inputDefault">
                 {{date}}
             </view>
