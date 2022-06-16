@@ -18,6 +18,7 @@ require (
 	github.com/medivhzhan/weapp/v2 v2.4.2
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.0.2 // indirect
+	github.com/streadway/amqp v1.0.0 // indirect
 	github.com/stretchr/testify v1.7.0 // indirect
 	go.mongodb.org/mongo-driver v1.7.4
 	go.uber.org/zap v1.10.0
