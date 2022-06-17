@@ -81,6 +81,7 @@ func ReadPem(p string) *rsa.PrivateKey {
 	return pem
 }
 
+//remark
 func main() {
 	service.RegisterRpcService(service.RpcServiceConfig{
 		Name: "登录服务",
