@@ -32,7 +32,7 @@ func (s *TripService) CreateTrip(ctx context.Context, request *trippb.CreateTrip
 		return nil, status.Error(codes.Unauthenticated, "没有创建行程的权限")
 	}
 
-	//创建行程前应验证汽车可用
+	//创建行程前应验证汽车可用.
 
 	tr, err := s.MgService.CreateTrip(accountId, request.CartId, trippb.LocationStatus{
 		Location: request.Start,
