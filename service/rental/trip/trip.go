@@ -25,12 +25,14 @@ func (s *TripService) CreateTrip(ctx context.Context, request *trippb.CreateTrip
 	if err != nil {
 		return nil, err
 	}
-	//验证是否有权限创建行程
+
 	err = s.Identity.Verify(ctx, accountId)
 
 	if err != nil {
 		return nil, status.Error(codes.Unauthenticated, "没有创建行程的权限")
 	}
+
+	//创建行程前应验证汽车可用
 
 	tr, err := s.MgService.CreateTrip(accountId, request.CartId, trippb.LocationStatus{
 		Location: request.Start,
