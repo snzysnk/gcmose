@@ -31,7 +31,7 @@ type Service struct {
 	Ws wechat.Service
 	mg dao.Mg
 	jt token.JWTToken
-}
+}x
 
 const privateKeyPath = "./service/auth/auth/private_key.pem"
 

@@ -19,4 +19,5 @@ function createProto(){
 
 createProto ./rental/api trip ./proto true
 createProto ./blob/api blob ./blob/proto false
+createProto ./car/api car ./car/proto false
 

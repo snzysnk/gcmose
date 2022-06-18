@@ -13,3 +13,15 @@ type ObjectIdField struct {
 type UpdateAtField struct {
 	UpdateAt int64
 }
+
+type CarId string
+
+func (c CarId) TransformToMongoId() (primitive.ObjectID, error) {
+	return primitive.ObjectIDFromHex(c.String())
+}
+
+func (c CarId) String() string {
+	return string(c)
+}
+
+var NewObjectIdFunc = primitive.NewObjectID

@@ -16,3 +16,7 @@ func (t TripId) String() string {
 func (t *TripId) ObjectId() (primitive.ObjectID, error) {
 	return primitive.ObjectIDFromHex(t.String())
 }
+
+func (t *TripId) TransformToMongoId() (primitive.ObjectID, error) {
+	return primitive.ObjectIDFromHex(t.String())
+}

@@ -1,0 +1,49 @@
+syntax = "proto3";
+package blob.v1;
+option go_package = "/ccmose/service/car/api;carpb";
+
+enum Car_Status {
+  LOCKED = 0;
+  UNLOCKING = 1;
+  UNLOCKED = 2;
+  LOCKING = 3;
+}
+
+message GetCarsRequest{
+
+}
+
+message Location {
+  double longitude = 1;
+  double latitude = 2;
+}
+
+message Car {
+  Car_Status status = 1;
+  string trip_id = 2;
+  Location location = 3;
+  string car_id = 4;
+}
+
+message GetCarsResponse{
+  repeated Car cars = 1;
+}
+
+message UpdateCarRequest{
+  string car_id = 1;
+  string trip_id = 2;
+  Car_Status status = 3;
+  Location location = 4;
+}
+
+message UpdateCarResponse{
+
+}
+
+
+
+service CarService{
+  rpc GetCars(GetCarsRequest) returns (GetCarsResponse){}
+  rpc UpdateCar(UpdateCarRequest) returns (UpdateCarResponse){}
+}
+
